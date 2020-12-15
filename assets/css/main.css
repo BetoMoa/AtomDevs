@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+:root {
+  scroll-behavior: smooth;
+}
+
+#home {
+  height: 100vh;
+  background-image: linear-gradient(
+      to top,
+      rgba(161, 140, 209, 0.5) 0%,
+      rgba(251, 194, 235, 0.5) 100%
+    ),
+    url("../img/principal.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+img {
+  display: block;
+  height: 400px;
+  object-fit: cover;
+  width: auto;
+}
+
+.card img {
+  width: 300px;
+  height: 150px;
+}
+
+footer {
+  left: 0px;
+  bottom: 0px;
+  height: 30px;
+  width: 100%;
+}
+
+#login{
+  width: 300px;
+  margin: 120px auto;
+  padding: 12px;
+}
+
+.icono{
+  font-size: 24px;
+}
