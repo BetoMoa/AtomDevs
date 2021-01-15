@@ -33,8 +33,12 @@ img {
   width: auto;
 }
 
-.card img {
+.tamaño {
   width: 300px;
+}
+
+.card img {
+  width: 100%;
   height: 150px;
 }
 
@@ -45,12 +49,39 @@ footer {
   width: 100%;
 }
 
-#login{
+#login {
   width: 300px;
   margin: 120px auto;
   padding: 12px;
 }
 
-.icono{
+.icono {
   font-size: 24px;
+}
+
+@media screen and (max-width: 320px) {
+  img {
+    display: block;
+    height: auto;
+    object-fit: cover;
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  img {
+    display: block;
+    height: auto;
+    object-fit: cover;
+    width: 300px;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  img {
+    display: block;
+    height: auto;
+    object-fit: cover;
+    width: 300px;
+  }
 }
