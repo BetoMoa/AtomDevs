@@ -1,6 +1,8 @@
 <?php
 include_once 'php/sesiones.php';
 include_once 'php/usuario.php';
+include_once 'php/conexion.php';
+$conexion = new DB();
 
 $usuario = new Usuario();
 $sesion = new Sesion();
@@ -133,6 +135,58 @@ if (isset($_SESSION['user'])) {
               </div>
             </div>
           </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header font-weight-bold">Mis pedidos</div>
+      <div class="card-body">
+        <?php
+
+        $id = $usuario->idUsuario();
+        $link = '';
+
+        $consulta = $conexion->connect()->query("SELECT * FROM pedidos INNER JOIN productos ON pedidos.id_producto = productos.id_producto WHERE id_usuario = '$id'");
+        $consulta->execute();
+        $consulta = $consulta->fetchAll();
+        ?>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead class="thead-dark text-center">
+              <tr>
+                <th>No. de pedido</th>
+                <th>Producto</th>
+                <th>Total</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <?php
+              foreach ($consulta as $producto) {
+
+                if($producto['id_producto'] == 1){
+                  $link = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6T46UPX33NZJQ';
+                } else {
+                  $link = 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9P3ZF7MB59XR4';
+                }
+              ?>
+
+                <tr>
+                  <td><?php echo $producto['id_pedido'] ?></td>
+                  <td><?php echo $producto['nombre_producto'] ?></td>
+                  <td><?php echo '$ '.$producto['precio_producto'].' MXN' ?></td>
+                  <td><a href="<?php echo $link; ?>" target="_blank" class="btn btn-primary">Terminar compra</a></td>
+                  <td><button onclick="eliminar(<?php echo $producto['id_pedido']; ?>)" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
+                </tr>
+              <?php
+              }
+              ?>
+            </tbody>
+          </table>
         </div>
 
       </div>

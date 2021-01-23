@@ -1,9 +1,11 @@
 <?php
 include_once 'php/sesiones.php';
 include_once 'php/usuario.php';
+include_once 'php/conexion.php';
 
 $usuario = new Usuario();
 $sesion = new Sesion();
+$conexion = new DB();
 
 if (isset($_SESSION['user'])) {
   $usuario->insertarUsuario($sesion->obtenerSesion());
@@ -31,43 +33,8 @@ if (isset($_SESSION['user'])) {
 </head>
 
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a href="index.php" class="navbar-brand"><i class="fas fa-atom mr-2"></i>AtomDevs</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navegation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbar">
-      <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="#home">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#servicios">Servicios</a>
-        </li>
-        <?php
-        if (isset($_SESSION['user'])) {
-          echo '<li class="nav-item dropdown">
-                  <button class="nav-link btn dropdown-toggle"
-                  type="button" id="dropdownMenu1" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-user mr-2"></i>
-                    ' . $usuario->nombreUsuario() . '
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-left" aria-labelledby="dropdownMenu1">
-                    <a class="dropdown-item" href="perfil.php">Mi cuenta</a>
-                    <a class="dropdown-item" href="php/logout.php">Cerrar sesión</a>
-                  </div>
-                </li>';
-        } else {
-          echo '<li class="nav-item">
-            <a class="nav-link" href="login.php"><i class="fas fa-user mr-2"></i>Iniciar sesión</a>
-          </li>';
-        }
-        ?>
-      </ul>
-    </div>
-  </nav>
+
+  <?php include_once 'vistas/navbar.inc.php'; ?>
 
   <!-- Contenedor principal -->
   <div id="home" class="d-flex justify-content-center align-items-center">
@@ -87,38 +54,51 @@ if (isset($_SESSION['user'])) {
     <img src="assets/img/code.svg" alt="">
   </div>
 
+  <?php
+  $landing = $conexion->connect()->query("SELECT id_producto FROM productos WHERE id_producto =" . '1');
+  $landing->execute();
+  $landing = $landing->fetch();
+
+  $tienda = $conexion->connect()->query("SELECT id_producto FROM productos WHERE id_producto =" . '2');
+  $tienda->execute();
+  $tienda = $tienda->fetch(); 
+  ?>
+
   <div id="servicios">
 
     <h4 class="text-center my-4">Nuestros paquetes</h4>
 
-    <div class="d-sm-flex justify-content-around align-items-center mx-auto mb-5">
-      <div class="card-group">
-        <div class="card tamaño shadow">
-          <img src="assets/img/landing.webp" alt="" class="card-img-top">
-          <div class="card-body text-center">
-            <h4 class="card-title">Landing page</h4>
-            <div class="text-left ">
-              <ul class="ml-3">
-                <li>Sitio personalizado</li>
-                <li>Anuncios personalzados</li>
-                <li>Portafolio</li>
-                <li>Formulario de contacto</li>
-                <li>Correo electrónico corporativo</li>
-              </ul>
-            </div>
-            <?php
-            if (isset($_SESSION['user'])) {
-              echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6T46UPX33NZJQ" target="_blank" class="btn btn-dark">Obtener ahora</a>';
-            } else {
-              echo '<a href="login.php" class="btn btn-dark">Obtener ahora</a>';
-            }
-            ?>
+    <div class="d-sm-flex justify-content-sm-center align-items-sm-center mb-2">
+      <div class="card tamaño shadow mx-auto mb-3">
+        <img src="assets/img/landing.webp" alt="" class="card-img-top">
+        <div class="card-body text-center">
+          <h4 class="card-title">Landing page</h4>
+          <div class="text-left ">
+            <ul class="ml-3">
+              <li>Sitio personalizado</li>
+              <li>Anuncios personalzados</li>
+              <li>Portafolio</li>
+              <li>Formulario de contacto</li>
+              <li>Correo electrónico corporativo</li>
+            </ul>
           </div>
+          <?php
+          if (isset($_SESSION['user'])) {
+          ?>
+            <form id="landing">
+              <input type="text" hidden name="id_producto" value="<?php echo $landing['id_producto']; ?>">
+              <input type="text" hidden name="id_usuario" value="<?php echo $usuario->idUsuario(); ?>">
+              <button type="submit" class="btn btn-dark">Agregar al carrito</button>
+            </form>
+          <?php
+          } else {
+            echo '<a href="login.php" class="btn btn-dark">Obtener ahora</a>';
+          }
+          ?>
         </div>
       </div>
 
-      <div class="card-group">
-        <div class="card tamaño shadow">
+      <div class="card tamaño shadow mx-auto mb-3">
         <img src="assets/img/tienda.png" alt="" class="card-img-top">
         <div class="card-body text-center">
           <h4 class="card-title">Tienda en línea</h4>
@@ -132,22 +112,30 @@ if (isset($_SESSION['user'])) {
           </div>
           <?php
           if (isset($_SESSION['user'])) {
-            echo '<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9P3ZF7MB59XR4" target="_blank" class="btn btn-dark">Obtener ahora</a>';
+          ?>
+            <form id="tienda">
+              <input type="text" hidden name="id_producto" value="<?php echo $tienda['id_producto']; ?>">
+              <input type="text" hidden name="id_usuario" value="<?php echo $usuario->idUsuario(); ?>">
+              <button type="submit" class="btn btn-dark">Agregar al carrito</button>
+            </form>
+          <?php
           } else {
             echo '<a href="login.php" class="btn btn-dark">Obtener ahora</a>';
           }
           ?>
         </div>
       </div>
-      </div>
     </div>
   </div>
 
-
   <!-- Footer -->
   <footer class="">
-    <div class="text-center bg-dark text-white">
-      <p class="py-4">Copyright &copy; 2020 AtomDevs</p>
+    <div class="text-center bg-dark text-white py-3">
+      <p>Copyright &copy; 2020 AtomDevs</p>
+      <div class="d-sm-flex justify-content-center align-items-center">
+        <a href="https://www.facebook.com/" target="_blank" class="mx-2 text-decoration-none btn btn-outline-light border-0 rounded-circle"><i class="fab fa-facebook"></i></a>
+        <a href="https://github.com/BetoMoa/AtomDevs.git" target="_blank" class="mx-2 text-decoration-none btn btn-outline-light border-0 rounded-circle"><i class="fab fa-github"></i></a>
+      </div>
     </div>
   </footer>
 
@@ -155,6 +143,7 @@ if (isset($_SESSION['user'])) {
   <script src="assets/js/jquery.js"></script>
   <script src="assets/js/bootstrap.min.js"></script>
   <script src="assets/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
 
 </html>

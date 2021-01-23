@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
 body {
   font-family: "Roboto", sans-serif;
 }
@@ -57,6 +62,11 @@ footer {
 
 .icono {
   font-size: 24px;
+}
+
+.carrito{
+  width: 200px;
+  height: 100px;
 }
 
 @media screen and (max-width: 320px) {

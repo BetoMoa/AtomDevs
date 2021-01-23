@@ -173,3 +173,60 @@ $("#cambiar_password").submit(function (e) {
 
   e.preventDefault();
 });
+
+$('#landing').submit(function (e){
+  let datos = $('#landing').serialize();
+
+  $.ajax({
+    type: "POST",
+    data: datos,
+    url: "php/landing.php",
+    success: function (r){
+      console.log(r);
+      if(r == 1){
+        Swal.fire("Agregado al carrito", "", "success");
+        setTimeout(function(){ location.reload(); }, 2000);
+      } else {
+        Swal.fire("Error con el servidor", "", "error");
+      }
+    }
+  });
+
+  e.preventDefault();
+});
+
+$('#tienda').submit(function (e){
+  let datos = $('#tienda').serialize();
+
+  $.ajax({
+    type: "POST",
+    data: datos,
+    url: "php/tienda.php",
+    success: function (r){
+      console.log(r);
+      if(r == 1){
+        Swal.fire("Agregado al carrito", "", "success");
+        setTimeout(function(){ location.reload(); }, 2000);
+      } else {
+        Swal.fire("Error con el servidor", "", "error");
+      }
+    }
+  });
+
+  e.preventDefault();
+});
+
+function eliminar(id){
+  $.ajax({
+    type: "POST",
+    data: "id=" + id,
+    url: "php/eliminar.php",
+    success: function (r){
+      if(r == 1){
+        location.reload();
+      } else {
+
+      }
+    }
+  });
+}
